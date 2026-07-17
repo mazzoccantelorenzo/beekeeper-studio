@@ -1370,12 +1370,25 @@ export default Vue.extend({
     },
     buildPendingInserts() {
       if (!this.table) return
+      
+      const now = new Date();
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      const localDateString = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
       const inserts = this.pendingChanges.inserts.map((item) => {
         const columnNames = this.table.columns.filter((c) => !c.generated)
         const rowData = item.row.getData()
         const result = {}
         columnNames.forEach(({ columnName, dataType }) => {
-          const d = rowData[columnName]
+          let d = rowData[columnName]
+          
+          const nameLower = columnName.toLowerCase();
+          const dt = dataType ? dataType.toUpperCase() : '';
+          const isDate = dt.includes('TIME') || dt.includes('DATE');
+          if (!d && isDate && (nameLower.includes('created') || nameLower.includes('updated') || nameLower === 'date' || nameLower === 'timestamp')) {
+            d = localDateString;
+          }
+
           if (this.isPrimaryKey(columnName) && (!d && d != 0)) {
             // do nothing
           } else {
