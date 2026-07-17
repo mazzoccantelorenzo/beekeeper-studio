@@ -332,6 +332,7 @@ import globals from '@/common/globals';
 import {AppEvent} from '../../common/AppEvent';
 import { vueEditor } from '@shared/lib/tabulator/helpers';
 import NullableInputEditorVue from '@shared/components/tabulator/NullableInputEditor.vue'
+import DateTimePickerEditorVue from '@shared/components/tabulator/DateTimePickerEditor.vue'
 import TableLength from '@/components/common/TableLength.vue'
 import { mapGetters, mapState } from 'vuex';
 import { TableUpdate, TableUpdateResult, ExtendedTableColumn } from '@/lib/db/models';
@@ -339,7 +340,7 @@ import { dialectFor, formatOptionsFor, TableKey } from '@shared/lib/dialects/mod
 import { normalizeFilters, safeSqlFormat, createTableFilter, isNumericDataType, isDateDataType, rowHeaderField } from '@/common/utils'
 import { TableFilter } from '@/lib/db/models';
 import { LanguageData } from '../../lib/editor/languageData'
-import { escapeHtml, FormatterParams } from '@shared/lib/tabulator';
+import helpers, { escapeHtml, FormatterParams } from '@shared/lib/tabulator';
 import { copyRanges, pasteRange, readClipboardRows, copyActionsMenu, pasteActionsMenu, commonColumnMenu, createMenuItem, resizeAllColumnsToFixedWidth, resizeAllColumnsToFitContent, resizeAllColumnsToFitContentAction } from '@/lib/menu/tableMenu';
 import { tabulatorForTableData } from "@/common/tabulator";
 import { TransportTabulatorPersistence } from "@/common/transport/TransportTabulatorPersistence";
@@ -1431,11 +1432,10 @@ export default Vue.extend({
     editorType(dt) {
       const ne = vueEditor(NullableInputEditorVue)
 
-      // FIXME: Enable once the datetime picker behaves itself
-      // when in the table
-      // if (helpers.isDateTime(dt)) {
-      //   return vueEditor(DateTimePickerEditorVue)
-      // }
+      // We enable datetime picker to improve UX for manual date entry
+      if (helpers.isDateTime(dt)) {
+        return vueEditor(DateTimePickerEditorVue)
+      }
 
       switch (dt?.toLowerCase() ?? '') {
         case 'text':

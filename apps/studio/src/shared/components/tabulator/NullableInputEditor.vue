@@ -1,22 +1,27 @@
 <template>
-  <div>
-    <input
-      v-if="!typeEditorActive"
-      class="nullible-input"
-      :placeholder="smartPlaceholder"
-      ref="input"
-      type="text"
-      v-model="value"
-      @blur.prevent="onBlur"
-      @change.prevent="submit"
-      @keydown="keydown"
-    >
-    <slot />
-    <i
-      class="material-icons clear"
-      @mousedown.prevent.stop="clear"
-      title="Nullify Value"
-    >cancel</i>
+  <div class="nullable-root">
+    <div class="nullable-input-wrapper">
+      <input
+        v-if="!typeEditorActive"
+        class="nullible-input"
+        :placeholder="smartPlaceholder"
+        ref="input"
+        type="text"
+        v-model="value"
+        @blur.prevent="onBlur"
+        @change.prevent="submit"
+        @keydown="keydown"
+      >
+      <slot />
+    </div>
+    <div class="nullable-controls">
+      <slot name="controls" />
+      <i
+        class="material-icons clear"
+        @mousedown.prevent.stop="clear"
+        title="Nullify Value"
+      >cancel</i>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -163,21 +168,51 @@ export default Vue.extend({
 <style lang="scss" scoped>
   @import '../../../shared/assets/styles/_variables';
 
-  div {
-    position: relative;
+  .nullable-root {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .nullable-input-wrapper {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: stretch;
+  }
+  ::v-deep .mx-datepicker {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
   }
   .nullible-input {
-    padding-right: 18px!important;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    padding-left: 8px!important;
+    padding-right: 8px!important;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    background: transparent;
+  }
+  .nullable-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: var(--theme-bg-dark, rgba(128,128,128,0.1));
+    border-left: 1px solid var(--theme-border, rgba(128,128,128,0.2));
+    padding: 0 4px;
+    gap: 4px;
+    flex-shrink: 0;
   }
   .clear {
-    position: absolute;
-    right: 3px;
     font-size: 14px!important;
-    width: 16px;
     text-align: center;
-    margin-top: -1px;
     cursor: pointer;
+    flex-shrink: 0;
   }
 </style>

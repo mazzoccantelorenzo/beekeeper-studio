@@ -17,11 +17,13 @@
       confirm-text="click to confirm new selection"
       @confirm="submit"
     />
-    <i
-      class="material-icons special-type"
-      @mousedown.prevent.stop="toggleTypeEditor"
-      :title="this.typeEditorTitle"
-    >{{ this.typeEditorIcon }}</i>
+    <template #controls>
+      <i
+        class="material-icons special-type"
+        @mousedown.prevent.stop="toggleTypeEditor"
+        :title="this.typeEditorTitle"
+      >{{ this.typeEditorIcon }}</i>
+    </template>
   </NullableInputEditor>
 </template>
 <script lang="ts">
@@ -129,8 +131,9 @@ export default Vue.extend({
 
   .special-type {
     font-size: 14px!important;
-    width: 16px;
-    position: absolute;
-    right: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-right: 4px;
+    margin-left: 4px;
   }
 </style>
