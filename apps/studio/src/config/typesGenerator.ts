@@ -31,6 +31,7 @@ export function generateConfigTypes(): void {
     dtsGen
       .generateIdentifierDeclarationFile("IBksConfig", processedConfig)
       .replace("declare const IBksConfig:", "declare interface IBksConfig")
+      .replace(/editTrigger: string;/g, "editTrigger: 'click' | 'doubleclick';")
       // dts-gen ends the declaration with `};` - valid after `const` but an
       // extra semicolon after an `interface`, which trips no-extra-semi.
       .replace(/};(\s*)$/, "}$1");

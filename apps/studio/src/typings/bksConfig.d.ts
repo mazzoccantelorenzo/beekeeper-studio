@@ -491,6 +491,7 @@ declare interface IBksConfig {
         };
         tableTable: {
             defaultColumnWidth: number;
+            editTrigger: 'click' | 'doubleclick';
             largeFieldWidth: number;
             maxColumnWidth: number;
             maxInitialWidth: number;
